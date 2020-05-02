@@ -56,7 +56,7 @@
 #include <linux/rtnetlink.h>
 #include <linux/completion.h>
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26) && LINUX_VERSION_CODE < KERNEL_VERSION(5,4,0)
 #include <linux/pci-aspm.h>
 #endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,4,37)
@@ -28373,7 +28373,7 @@ static void rtl8168_down(struct net_device *dev)
 
 #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,11)
         /* Give a racing hard_start_xmit a few cycles to complete. */
-        synchronize_sched();  /* FIXME: should this be synchronize_irq()? */
+        synchronize_rcu();  /* FIXME: should this be synchronize_irq()? */
 #endif
 
         spin_lock_irqsave(&tp->lock, flags);
